@@ -109,3 +109,6 @@ py:class a shallow copy of D
 
 # This extends the numpydoc list above to fix lincheck warning
 py:class reference target not found: (k, v)
+
+# Fix warning that occurs in BoxLeastSquaresResults
+py:class remove and return some
