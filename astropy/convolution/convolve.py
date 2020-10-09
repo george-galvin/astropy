@@ -190,7 +190,7 @@ def convolve(array, kernel, boundary='fill', fill_value=0.,
     passed_kernel = kernel
     passed_array = array
 
-    #Get array quantity if exists
+    # Get array quantity if exists
     if hasattr(passed_array, "unit"):
         passed_quantity = passed_array.unit
     else:
