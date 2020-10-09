@@ -191,8 +191,16 @@ def convolve(array, kernel, boundary='fill', fill_value=0.,
     passed_array = array
 
     # Get array quantity if exists
+<<<<<<< HEAD
     passed_quantity = getattr(passed_array, "unit", None)
     
+=======
+    if hasattr(passed_array, "unit"):
+        passed_quantity = passed_array.unit
+    else:
+        passed_quantity = 1
+
+>>>>>>> 48d099ea07ab0269a682d1afe80ed93b6bae2552
     # The C routines all need float type inputs (so, a particular
     # bit size, endianness, etc.).  So we have to convert, which also
     # has the effect of making copies so we don't modify the inputs.
