@@ -195,7 +195,7 @@ def convolve(array, kernel, boundary='fill', fill_value=0.,
         passed_quantity = passed_array.unit
     else:
         passed_quantity = 1
-    
+
     # The C routines all need float type inputs (so, a particular
     # bit size, endianness, etc.).  So we have to convert, which also
     # has the effect of making copies so we don't modify the inputs.
