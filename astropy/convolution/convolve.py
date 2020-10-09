@@ -190,6 +190,12 @@ def convolve(array, kernel, boundary='fill', fill_value=0.,
     passed_kernel = kernel
     passed_array = array
 
+    #Get array quantity if exists
+    if hasattr(passed_array, "unit"):
+        passed_quantity = passed_array.unit
+    else:
+        passed_quantity = 1
+    
     # The C routines all need float type inputs (so, a particular
     # bit size, endianness, etc.).  So we have to convert, which also
     # has the effect of making copies so we don't modify the inputs.
@@ -364,16 +370,16 @@ def convolve(array, kernel, boundary='fill', fill_value=0.,
         new_result._separable = passed_array._separable
         if isinstance(passed_kernel, Kernel):
             new_result._separable = new_result._separable and passed_kernel._separable
-        return new_result
+        return new_result * passed_quantity
     elif array_dtype.kind == 'f':
         # Try to preserve the input type if it's a floating point type
         # Avoid making another copy if possible
         try:
-            return result.astype(array_dtype, copy=False)
+            return result.astype(array_dtype, copy=False) * passed_quantity
         except TypeError:
-            return result.astype(array_dtype)
+            return result.astype(array_dtype) * passed_quantity
     else:
-        return result
+        return result * passed_quantity
 
 
 @support_nddata(data='array')
@@ -566,6 +572,12 @@ def convolve_fft(array, kernel, boundary='fill', fill_value=0.,
 
     if nan_treatment not in ('interpolate', 'fill'):
         raise ValueError("nan_treatment must be one of 'interpolate','fill'")
+
+    #Get array quantity if it exists
+    if hasattr(array, "unit"):
+        passed_quantity = array.unit
+    else:
+        passed_quantity = 1
 
     # Convert array dtype to complex
     # and ensure that list inputs become arrays
@@ -760,7 +772,7 @@ def convolve_fft(array, kernel, boundary='fill', fill_value=0.,
     fftmult *= kernel_scale
 
     if return_fft:
-        return fftmult
+        return fftmult * passed_quantity
 
     if interpolate_nan:
         with np.errstate(divide='ignore', invalid='ignore'):
@@ -782,9 +794,9 @@ def convolve_fft(array, kernel, boundary='fill', fill_value=0.,
 
     if crop:
         result = rifft[arrayslices].real
-        return result
+        return result * passed_quantity
     else:
-        return rifft.real
+        return rifft.real * passed_quantity
 
 
 def interpolate_replace_nans(array, kernel, convolve=convolve, **kwargs):
